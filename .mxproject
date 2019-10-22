@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=F:/103RCT6_CubeMX/103RCT6_CUBE/Inc
+HeaderPath=E:/GIT_project/mycar/Inc
 HeaderFiles=stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;
-SourcePath=F:/103RCT6_CubeMX/103RCT6_CUBE/Src
+SourcePath=E:/GIT_project/mycar/Src
 SourceFiles=stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]
