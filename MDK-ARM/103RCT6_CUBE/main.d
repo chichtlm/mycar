@@ -28,10 +28,13 @@
 103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
+103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 103rct6_cube\main.o: ../Inc/adc.h
 103rct6_cube\main.o: ../Inc/i2c.h
 103rct6_cube\main.o: ../Inc/spi.h
+103rct6_cube\main.o: ../Inc/tim.h
 103rct6_cube\main.o: ../Inc/usart.h
 103rct6_cube\main.o: ../Inc/gpio.h
 103rct6_cube\main.o: ../Drivers/CMSIS/Include/core_cm3.h

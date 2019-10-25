@@ -5,6 +5,7 @@
 "103rct6_cube\adc.o"
 "103rct6_cube\i2c.o"
 "103rct6_cube\spi.o"
+"103rct6_cube\tim.o"
 "103rct6_cube\usart.o"
 "103rct6_cube\stm32f1xx_it.o"
 "103rct6_cube\stm32f1xx_hal_msp.o"

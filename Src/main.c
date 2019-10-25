@@ -46,6 +46,8 @@
 static void usart_send(void);
 static void set_blink(uint16_t period);
 static void led_task(void);
+static void motor_start(void);
+static void motor_stop(void);
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -113,6 +115,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
     set_blink(1000);
 
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -122,7 +126,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    usart_send();
+    //usart_send();
 
     led_task();
   }
@@ -199,16 +203,45 @@ static void set_blink(uint16_t period)
 static void led_task(void)
 {
     static uint32_t next;
+
+    static uint32_t i = 0;
     uint32_t curr;
+    
 
     curr = HAL_GetTick();
     if(curr > next)
     {
         HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_2);
         next = curr + led_period;
+
+        i++;
+        if(0==(i%2))
+        {
+           motor_start(); 
+        }
+        else
+        {
+            motor_stop();
+        }
     }
 
 }
+
+
+static void motor_start(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 50);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);  
+}
+
+static void motor_stop(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);  
+}
+
 /* USER CODE END 4 */
 
 /**

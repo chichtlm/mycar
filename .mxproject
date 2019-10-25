@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=E:/GIT_project/mycar/carsrc/Inc
+HeaderPath=F:/gitHub_project/103RCT6_CubeMX/103RCT6_CUBE/Inc
 HeaderFiles=stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;gpio.h;adc.h;i2c.h;spi.h;usart.h;tim.h;
-SourcePath=E:/GIT_project/mycar/carsrc/Src
+SourcePath=F:/gitHub_project/103RCT6_CubeMX/103RCT6_CUBE/Src
 SourceFiles=stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;gpio.c;adc.c;i2c.c;spi.c;usart.c;tim.c;
 
 [PreviousLibFiles]
