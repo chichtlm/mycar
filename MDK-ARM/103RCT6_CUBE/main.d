@@ -39,3 +39,4 @@
 103rct6_cube\main.o: ../Inc/gpio.h
 103rct6_cube\main.o: ../Drivers/CMSIS/Include/core_cm3.h
 103rct6_cube\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
+103rct6_cube\main.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

@@ -31,6 +31,7 @@
 /* USER CODE BEGIN Includes */
 #include "core_cm3.h"
 #include "stm32f1xx_ll_gpio.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,12 +47,21 @@
 static void usart_send(void);
 static void set_blink(uint16_t period);
 static void led_task(void);
-static void motor_start(void);
-static void motor_stop(void);
+static void motor_1_forward(void);
+static void motor_2_forward(void);
+static void motor_3_forward(void);
+static void motor_4_forward(void);
+
+
+static void motor_1_reverse(void);
+static void motor_1_brake(void);
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define USART_DEBUG huart2
+
 
 /* USER CODE END PM */
 
@@ -115,7 +125,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
     set_blink(1000);
 
-
+    __HAL_TIM_SET_COUNTER(&htim2, 0);
+    __HAL_TIM_SET_COUNTER(&htim3, 0);
+    __HAL_TIM_SET_COUNTER(&htim4, 0);
+    
+    HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+    HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+    HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
 
   /* USER CODE END 2 */
 
@@ -199,6 +215,12 @@ static void set_blink(uint16_t period)
 }
 
 
+static uint16_t timer_cnt2 = 0;
+static uint16_t timer_cnt3 = 0;
+static uint16_t timer_cnt4 = 0;
+static uint16_t timer_cnt = 0;
+
+
 
 static void led_task(void)
 {
@@ -207,7 +229,6 @@ static void led_task(void)
     static uint32_t i = 0;
     uint32_t curr;
     
-
     curr = HAL_GetTick();
     if(curr > next)
     {
@@ -217,31 +238,90 @@ static void led_task(void)
         i++;
         if(0==(i%2))
         {
-           motor_start(); 
+           motor_1_forward(); 
+           motor_2_forward();
+           motor_3_forward();
+           motor_4_forward();
+
+           timer_cnt2 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim2);
+            __HAL_TIM_SET_COUNTER(&htim2, 0);
+
+            timer_cnt3 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim3);
+            __HAL_TIM_SET_COUNTER(&htim3, 0);
+
+            timer_cnt4 = (uint16_t)__HAL_TIM_GET_COUNTER(&htim4);
+            __HAL_TIM_SET_COUNTER(&htim4, 0);
+
+           printf("\r\ntimer_cnt:%d,%d,%d",timer_cnt2,timer_cnt3,timer_cnt4);
         }
         else
         {
-            motor_stop();
+            //motor_1_reverse();
         }
     }
-
 }
 
-
-static void motor_start(void)
+static void motor_1_forward(void)
 {
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 50);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 80);
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);  
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
 }
 
-static void motor_stop(void)
+static void motor_2_forward(void)
 {
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);  
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 80);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
 }
 
+static void motor_3_forward(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 80);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+}
+
+static void motor_4_forward(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 50);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET); 
+}
+
+
+
+static void motor_1_reverse(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 80);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+    //HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_4);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET); 
+}
+
+
+static void motor_1_brake(void)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_4);
+    //HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_4);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET); 
+}
+
+
+int fputc(int ch,FILE *f)
+{
+    uint8_t buffer[1] = {ch};
+    HAL_UART_Transmit(&USART_DEBUG, buffer, 1, 5);
+}
+
+int fgetc(FILE *f)
+{   
+    uint8_t buffer;
+    HAL_UART_Receive(&USART_DEBUG, &buffer, 1, 5);
+  
+    return buffer;
+}
 /* USER CODE END 4 */
 
 /**
